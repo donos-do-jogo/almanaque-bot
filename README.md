@@ -22,6 +22,7 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
   - Amazon DynamoDB  
   - Amazon API Gateway
   - Amazon S3
+  - Amazon Bedrock
 - **Outros**: Docker
 
 ---
