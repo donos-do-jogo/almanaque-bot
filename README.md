@@ -28,5 +28,8 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 
 ## 🙇‍♂️ Membros
 [Leonardo Farias](https://www.linkedin.com/in/leofariasrj25/)
+
 [Israel Arantes](https://www.linkedin.com/in/israelarantes/)
+
+[Lucas Batista](www.linkedin.com/in/lucas-batista-leite-b33607221)
 
