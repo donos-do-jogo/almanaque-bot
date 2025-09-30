@@ -20,10 +20,13 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
   - Amazon Lex  
   - AWS Lambda  
   - Amazon DynamoDB  
-  - Amazon API Gateway  
+  - Amazon API Gateway
+  - Amazon S3
 - **Outros**: Docker
 
 ---
 
 ## 🙇‍♂️ Membros
 [Leonardo Farias](https://www.linkedin.com/in/leofariasrj25/)
+[Israel Arantes](https://www.linkedin.com/in/israelarantes/)
+
