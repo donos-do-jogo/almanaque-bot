@@ -36,4 +36,5 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 - [Israel Arantes](https://www.linkedin.com/in/israelarantes/)
 - [Lucas Batista](www.linkedin.com/in/lucas-batista-leite-b33607221)
 - [Laísa Silva](https://www.linkedin.com/in/laísa-ferreira-da-silva-)
+- [Jaubert Morais](https://www.linkedin.com/in/jaubert-morais-de-jesus/)
 
