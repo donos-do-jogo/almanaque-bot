@@ -17,15 +17,15 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 - **Linguagem**: Python 3.10+  
 - **Frameworks**: Django / Flask  
 - **AWS Services**:  
-  - Amazon Lex
+  - Amazon Bedrock
   - Route 53
   - Cloudfront
   - AWS IAM 
   - AWS Lambda  
   - Amazon DynamoDB  
   - Amazon API Gateway
-  - Amazon S3
-  - Amazon Bedrock
+  - Amazon Fargate
+  - Amazon ECS
   - Boto 3 
 - **Outros**: Docker, React
 
