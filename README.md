@@ -31,10 +31,16 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 
 ---
 
+🏗️ Arquitetura
+
+![WhatsApp Image 2025-10-07 at 9 00 37 PM](https://github.com/user-attachments/assets/3946379f-5686-4c4f-aa14-022363e50ecc)
+
+---
+
 ## 🙇‍♂️ Membros
 - [Leonardo Farias](https://www.linkedin.com/in/leofariasrj25/)
 - [Israel Arantes](https://www.linkedin.com/in/israelarantes/)
 - [Lucas Batista](https://www.linkedin.com/in/lucas-batista-leite-b33607221)
 - [Laísa Silva](https://www.linkedin.com/in/laísa-ferreira-da-silva-)
 - [Jaubert Morais](https://www.linkedin.com/in/jaubert-morais-de-jesus/)
-- [Ronildo](https://www.linkedin.com/in/ronildo-simoes/)
+- [Ronildo Simões](https://www.linkedin.com/in/ronildo-simoes/)
