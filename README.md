@@ -32,7 +32,7 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 ---
 
 ## 🏗️ Arquitetura
-![WhatsApp Image 2025-10-07 at 9 00 37 PM](https://github.com/user-attachments/assets/3946379f-5686-4c4f-aa14-022363e50ecc)
+<img width="834" height="586" alt="arqadjusted" src="https://github.com/user-attachments/assets/386419b6-8d90-406f-a3e1-2b7b9c427115" />
 
 ---
 
