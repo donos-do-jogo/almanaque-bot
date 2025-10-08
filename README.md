@@ -7,7 +7,7 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 ---
 
 ## 🚀 Funcionalidades
-- Integração com **AWS Lex** e **AWS Lambda**  
+- Integração com **AWS Amplify** e **AWS Lambda**  
 - Conexão com **DynamoDB** para persistência de dados  
 - Pipeline de deploy simplificado via **AWS CLI / CDK**
 
@@ -19,13 +19,13 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
 - **AWS Services**:  
   - Amazon Bedrock
   - Route 53
-  - Cloudfront
+  - AWS Amplify
   - AWS IAM 
   - AWS Lambda  
   - Amazon DynamoDB  
   - Amazon API Gateway
-  - Amazon Fargate
-  - Amazon ECS
+  - Amazon WAF
+  - Amazon S3
   - Boto 3 
 - **Outros**: Docker, React
 
