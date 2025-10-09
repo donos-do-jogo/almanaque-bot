@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 28 45% 97%;
+    --foreground: 25 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 25 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 30% 15%;
+
+    --primary: 25 95% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 25 95% 68%;
+
+    --secondary: 207 90% 54%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 28 25% 94%;
+    --muted-foreground: 25 15% 45%;
+
+    --accent: 207 90% 54%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 45 93% 58%;
+    --warning-foreground: 25 30% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 28 20% 88%;
+    --input: 28 20% 88%;
+    --ring: 25 95% 58%;
+
+    --radius: 0.75rem;
+
+    --chat-user-bg: 25 95% 58%;
+    --chat-user-text: 0 0% 100%;
+    --chat-bot-bg: 207 90% 96%;
+    --chat-bot-text: 25 30% 15%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 58%) 0%, hsl(25 95% 68%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(207 90% 54%) 0%, hsl(207 90% 64%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(25 95% 58%) 0%, hsl(25 95% 48%) 30%, hsl(207 90% 54%) 100%);
+
+    --shadow-lg: 0 10px 40px -10px hsl(25 95% 58% / 0.3);
+    --shadow-glow: 0 0 40px hsl(25 95% 68% / 0.4);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 28 45% 98%;
+    --sidebar-foreground: 25 30% 20%;
+    --sidebar-primary: 25 95% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 28 30% 94%;
+    --sidebar-accent-foreground: 25 30% 20%;
+    --sidebar-border: 28 20% 88%;
+    --sidebar-ring: 25 95% 58%;
+  }
+
+  .dark {
+    --background: 25 30% 8%;
+    --foreground: 28 20% 95%;
+
+    --card: 25 30% 12%;
+    --card-foreground: 28 20% 95%;
+
+    --popover: 25 30% 12%;
+    --popover-foreground: 28 20% 95%;
+
+    --primary: 25 95% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 25 95% 68%;
+
+    --secondary: 207 90% 54%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 25 20% 18%;
+    --muted-foreground: 28 15% 60%;
+
+    --accent: 207 90% 54%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 45 93% 58%;
+    --warning-foreground: 25 30% 15%;
+
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 28 20% 95%;
+
+    --border: 25 20% 18%;
+    --input: 25 20% 18%;
+    --ring: 25 95% 58%;
+
+    --chat-user-bg: 25 95% 58%;
+    --chat-user-text: 0 0% 100%;
+    --chat-bot-bg: 25 20% 18%;
+    --chat-bot-text: 28 20% 95%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 58%) 0%, hsl(25 95% 48%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(207 90% 54%) 0%, hsl(207 90% 44%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(25 95% 58%) 0%, hsl(25 95% 48%) 30%, hsl(207 90% 54%) 100%);
+
+    --shadow-lg: 0 10px 40px -10px hsl(25 95% 58% / 0.5);
+    --shadow-glow: 0 0 40px hsl(25 95% 68% / 0.6);
+
+    --sidebar-background: 25 30% 10%;
+    --sidebar-foreground: 28 20% 90%;
+    --sidebar-primary: 25 95% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 25 20% 16%;
+    --sidebar-accent-foreground: 28 20% 90%;
+    --sidebar-border: 25 20% 16%;
+    --sidebar-ring: 25 95% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

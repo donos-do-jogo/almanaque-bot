@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "geminiModel",
+      "environmentVariableName": "GEMINI_MODEL"
+    },
+    {
+      "cloudFormationParameterName": "genApiKey",
+      "environmentVariableName": "GEN_API_KEY"
+    }
+  ]
+}

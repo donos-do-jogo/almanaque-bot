@@ -1,0 +1,59 @@
+{
+  "api": {
+    "statsAi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "apiHandler"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "apiHandler": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_apiHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "apiHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_apiHandler_geminiModel": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "apiHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_apiHandler_genApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "apiHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_apiHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "apiHandler"
+        }
+      ]
+    }
+  }
+}

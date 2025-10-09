@@ -1,0 +1,54 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-almanaquebot-dev-1277d-authRole",
+      "UnauthRoleArn": "arn:aws:iam::810774026993:role/amplify-almanaquebot-dev-1277d-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::810774026993:role/amplify-almanaquebot-dev-1277d-authRole",
+      "Region": "sa-east-1",
+      "DeploymentBucketName": "amplify-almanaquebot-dev-1277d-deployment",
+      "UnauthRoleName": "amplify-almanaquebot-dev-1277d-unauthRole",
+      "StackName": "amplify-almanaquebot-dev-1277d",
+      "StackId": "arn:aws:cloudformation:sa-east-1:810774026993:stack/amplify-almanaquebot-dev-1277d/c4e75760-a4a5-11f0-bdf1-061f304e9f11",
+      "AmplifyAppId": "dvkjaag55cat0"
+    },
+    "categories": {
+      "function": {
+        "apiHandler": {
+          "deploymentBucketName": "amplify-almanaquebot-dev-1277d-deployment",
+          "s3Key": "amplify-builds/apiHandler-4e6a674a70384e537a62-build.zip",
+          "genApiKey": "AIzaSyDunk-PsbgQ09k2wtRuS4H6NN1_HIFPbY8",
+          "geminiModel": "gemini-2.5-flash"
+        }
+      },
+      "api": {
+        "statsAi": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-almanaquebot-prod-4995a-authRole",
+      "UnauthRoleArn": "arn:aws:iam::810774026993:role/amplify-almanaquebot-prod-4995a-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::810774026993:role/amplify-almanaquebot-prod-4995a-authRole",
+      "Region": "sa-east-1",
+      "DeploymentBucketName": "amplify-almanaquebot-prod-4995a-deployment",
+      "UnauthRoleName": "amplify-almanaquebot-prod-4995a-unauthRole",
+      "StackName": "amplify-almanaquebot-prod-4995a",
+      "StackId": "arn:aws:cloudformation:sa-east-1:810774026993:stack/amplify-almanaquebot-prod-4995a/b41beb70-a50a-11f0-ad48-024a2c07e519",
+      "AmplifyAppId": "dvkjaag55cat0"
+    },
+    "categories": {
+      "function": {
+        "apiHandler": {
+          "deploymentBucketName": "amplify-almanaquebot-prod-4995a-deployment",
+          "s3Key": "amplify-builds/apiHandler-4e6a674a70384e537a62-build.zip",
+          "geminiModel": "gemini-2.5-flash",
+          "genApiKey": "AIzaSyC1coEJuHst5nt-s2rHL2xn8MtgSt6EhaI"
+        }
+      },
+      "api": {
+        "statsAi": {}
+      }
+    }
+  }
+}
