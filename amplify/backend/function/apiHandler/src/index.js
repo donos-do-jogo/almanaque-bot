@@ -1,5 +1,6 @@
 const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+const persona = process.env.SYSTEM_PROMPT;
 
 function jsonResponse(statusCode, bodyObj) {
     return {
@@ -28,6 +29,15 @@ exports.handler = async (event) => {
     }
 
     try {
+        if (!persona) {
+            throw new Error("SYSTEM_PROMPT env variable is not set");
+        }
+
+        const systemInstruction = {
+            role: 'user',
+            parts: [{ text: persona }]
+        };
+
         const body = event.body ? JSON.parse(event.body) : {};
         const prompt = body.prompt || "";
         const history = body.history || [];
@@ -48,6 +58,7 @@ exports.handler = async (event) => {
         ];
 
         const payload = {
+            systemInstruction,
             contents,
             generationConfig: {
                 temperature: 0.7,
@@ -93,3 +104,5 @@ exports.handler = async (event) => {
         return jsonResponse(500, { error: err.message || String(err) });
     }
 };
+
+

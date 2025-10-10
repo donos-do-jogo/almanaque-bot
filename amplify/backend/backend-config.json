@@ -54,6 +54,14 @@
           "resourceName": "apiHandler"
         }
       ]
+    },
+    "AMPLIFY_function_apiHandler_systemPrompt": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "apiHandler"
+        }
+      ]
     }
   }
 }

@@ -8,6 +8,10 @@
     {
       "cloudFormationParameterName": "genApiKey",
       "environmentVariableName": "GEN_API_KEY"
+    },
+    {
+      "cloudFormationParameterName": "systemPrompt",
+      "environmentVariableName": "SYSTEM_PROMPT"
     }
   ]
 }
