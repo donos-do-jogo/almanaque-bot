@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-// Import the v6 API functions
-import { post } from '@aws-amplify/api';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { post } from "aws-amplify/api";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import TypingIndicator from "./TypingIndicator";
@@ -10,6 +9,7 @@ interface Message {
   text: string;
   isBot: boolean;
   timestamp: Date;
+  status?: "pending" | "sent" | "error";
 }
 
 const INITIAL_MESSAGES: Message[] = [
@@ -21,78 +21,126 @@ const INITIAL_MESSAGES: Message[] = [
   },
 ];
 
-const ChatContainer = () => {
+const makeId = () =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? (crypto as any).randomUUID()
+    : Date.now().toString();
+
+export default function ChatContainer(): JSX.Element {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // ref para evitar stale closures
+  const messagesRef = useRef<Message[]>(messages);
   useEffect(() => {
-    scrollToBottom();
+    messagesRef.current = messages;
+  }, [messages]);
+
+  // request id para ignorar respostas antigas
+  const requestIdRef = useRef(0);
+
+  // scroll automático
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  const handleSendMessage = async (text: string) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
+  const handleSendMessage = useCallback(async (text: string) => {
+    if (!text || !text.trim()) return;
+
+    const userId = makeId();
+    const botId = makeId();
+
+    const userMessage: Message = {
+      id: userId,
       text,
       isBot: false,
       timestamp: new Date(),
+      status: "sent",
     };
 
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
+    const botPlaceholder: Message = {
+      id: botId,
+      text: "",
+      isBot: true,
+      timestamp: new Date(),
+      status: "pending",
+    };
+
+    setMessages((prev) => [...prev, userMessage, botPlaceholder]);
     setIsTyping(true);
 
+    const historyForBackend = messagesRef.current.map((m) => ({
+      text: m.text,
+      isBot: m.isBot,
+    }));
+    historyForBackend.push({ text, isBot: false });
+
+    const myRequestId = ++requestIdRef.current;
+
     try {
-      const restOperation = post({
-        apiName: 'statsAi', // Ensure this is your API name from 'amplify status'
-        path: '/chat',
-        options: {
-          body: {
-            prompt: text,
-            history: messages
-          }
-        }
+      const restOperation = await post({
+        apiName: "statsAi",
+        path: "/chat",
+        options: { body: { prompt: text, history: historyForBackend } },
       });
 
-      const { body } = await restOperation.response;
-      const data = await body.json();
+      let data: any = null;
+      if (restOperation && (restOperation as any).response) {
+        const { body } = await (restOperation as any).response;
+        data = await body.json();
+      } else {
+        data = restOperation;
+      }
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: data.response,
-        isBot: true,
-        timestamp: new Date(),
-      };
+      if (requestIdRef.current !== myRequestId) return;
 
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error("Error fetching bot response:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: "Sorry, I'm having trouble connecting. Please try again later.",
-        isBot: true,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      const botText =
+        (data &&
+          (data.response ??
+            data.text ??
+            (typeof data === "string" ? data : ""))) ||
+        "⚠️ Nenhuma resposta do servidor.";
+
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === botId
+            ? { ...m, text: botText, status: "sent", timestamp: new Date() }
+            : m
+        )
+      );
+    } catch (err: any) {
+      console.error("Error fetching bot response:", err);
+      if (requestIdRef.current !== myRequestId) return;
+
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === botId
+            ? {
+              ...m,
+              text: "Desculpe, não foi possível conectar ao servidor. Tente novamente.",
+              status: "error",
+              timestamp: new Date(),
+            }
+            : m
+        )
+      );
     } finally {
-      setIsTyping(false);
+      if (requestIdRef.current === myRequestId) setIsTyping(false);
     }
-  };
+  }, []);
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex-1 overflow-y-auto">
-        <div className="container mx-auto px-4 py-6">
-          {messages.map((message) => (
+    <div className="flex flex-col h-screen w-full">
+      {/* Chat messages */}
+      <div className="flex-1 overflow-y-auto w-full px-6 py-6">
+        <div className="max-w-screen-xl mx-auto flex flex-col gap-4">
+          {messages.map((m) => (
             <ChatMessage
-              key={message.id}
-              message={message.text}
-              isBot={message.isBot}
-              timestamp={message.timestamp}
+              key={m.id}
+              message={m.text}
+              isBot={m.isBot}
+              timestamp={m.timestamp}
             />
           ))}
           {isTyping && <TypingIndicator />}
@@ -100,9 +148,12 @@ const ChatContainer = () => {
         </div>
       </div>
 
-      <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
+      {/* Chat input */}
+      <div className="w-full border-t p-4">
+        <div className="max-w-screen-xl mx-auto">
+          <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ChatContainer;
+}
