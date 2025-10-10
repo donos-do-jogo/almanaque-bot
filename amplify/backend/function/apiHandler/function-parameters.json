@@ -2,6 +2,10 @@
   "lambdaLayers": [],
   "environmentVariableList": [
     {
+      "cloudFormationParameterName": "systemPrompt",
+      "environmentVariableName": "SYSTEM_PROMPT"
+    },
+    {
       "cloudFormationParameterName": "geminiModel",
       "environmentVariableName": "GEMINI_MODEL"
     },

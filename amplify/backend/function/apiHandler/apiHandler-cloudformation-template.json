@@ -16,13 +16,13 @@
     "s3Key": {
       "Type": "String"
     },
+    "systemPrompt": {
+      "Type": "String"
+    },
     "geminiModel": {
       "Type": "String"
     },
     "genApiKey": {
-      "Type": "String"
-    },
-    "systemPrompt": {
       "Type": "String"
     }
   },
@@ -79,14 +79,14 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
+            "SYSTEM_PROMPT": {
+              "Ref": "systemPrompt"
+            },
             "GEMINI_MODEL": {
               "Ref": "geminiModel"
             },
             "GEN_API_KEY": {
               "Ref": "genApiKey"
-            },
-            "SYSTEM_PROMPT": {
-              "Ref": "systemPrompt"
             }
           }
         },
