@@ -15,6 +15,7 @@
       "service": "API Gateway"
     }
   },
+  "auth": {},
   "function": {
     "apiHandler": {
       "build": true,
