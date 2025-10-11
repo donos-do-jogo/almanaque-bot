@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import ChatHeader from "@/components/ChatHeader";
+import Navbar from "@/components/Navbar"; // 1. Trocado ChatHeader por Navbar
 import ChatContainer from "@/components/ChatContainer";
 
 const Chat = () => {
@@ -15,8 +15,9 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-background overflow-hidden">
-      <ChatHeader />
+    // 2. Adicionado "pt-16" para criar espaço para a Navbar fixa
+    <div className="flex flex-col h-screen bg-background overflow-hidden pt-16">
+      <Navbar />
       <ChatContainer />
     </div>
   );
