@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "almanaquebotf4edc99a_identitypool_f4edc99a",
+    "identityPoolName": "almanaquebotf5c21ee4_identitypool_f5c21ee4",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "almanaf4edc99a",
-    "userPoolName": "almanaquebotf4edc99a_userpool_f4edc99a",
+    "resourceNameTruncated": "almanaf5c21ee4",
+    "userPoolName": "almanaquebotf5c21ee4_userpool_f5c21ee4",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -14,7 +14,7 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Your verification code",
+    "emailVerificationSubject": "[Almanaque Bot] Your verification code",
     "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
@@ -31,15 +31,23 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "almanaf4edc99a_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "almanaf5c21ee4_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "f4edc99a",
-    "resourceName": "almanaquebotf4edc99a",
+    "sharedId": "f5c21ee4",
+    "resourceName": "almanaquebotf5c21ee4f5c21ee4",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "default",
+    "useDefault": "manual",
+    "thirdPartyAuth": true,
+    "authProviders": [
+      "accounts.google.com"
+    ],
     "usernameAttributes": [
       "email"
     ],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": {},
+    "hostedUI": false,
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

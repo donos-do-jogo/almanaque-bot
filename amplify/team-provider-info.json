@@ -23,6 +23,11 @@
       },
       "api": {
         "statsAi": {}
+      },
+      "auth": {
+        "almanaquebotf5c21ee4f5c21ee4": {
+          "googleClientId": "980706037845-vfahasgf09l9of13v7kkkqjlbt4chu3t.apps.googleusercontent.com"
+        }
       }
     }
   },

@@ -15,7 +15,34 @@
       "service": "API Gateway"
     }
   },
-  "auth": {},
+  "auth": {
+    "almanaquebotf5c21ee4f5c21ee4": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
   "function": {
     "apiHandler": {
       "build": true,
@@ -24,6 +51,14 @@
     }
   },
   "parameters": {
+    "AMPLIFY_auth_almanaquebotf5c21ee4f5c21ee4_googleClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "almanaquebotf5c21ee4f5c21ee4"
+        }
+      ]
+    },
     "AMPLIFY_function_apiHandler_deploymentBucketName": {
       "usedBy": [
         {
