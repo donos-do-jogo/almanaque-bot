@@ -24,9 +24,6 @@
     },
     "genApiKey": {
       "Type": "String"
-    },
-    "systemPrompt": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -90,9 +87,6 @@
             },
             "GEN_API_KEY": {
               "Ref": "genApiKey"
-            },
-            "SYSTEM_PROMPT": {
-              "Ref": "systemPrompt"
             }
           }
         },
