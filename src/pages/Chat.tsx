@@ -1,33 +1,8 @@
-/*import { useEffect } from "react";
-import Navbar from "@/components/Navbar"; // 1. Trocado ChatHeader por Navbar
-import ChatContainer from "@/components/ChatContainer";
+// src/pages/Chat.tsx (Versão Final Corrigida)
 
-const Chat = () => {
-  useEffect(() => {
-    // Previne zoom em dispositivos móveis ao focar inputs
-    const viewport = document.querySelector('meta[name="viewport"]');
-    if (viewport) {
-      viewport.setAttribute(
-        'content',
-        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
-      );
-    }
-  }, []);
-
-  return (
-    // 2. Adicionado "pt-16" para criar espaço para a Navbar fixa
-    <div className="flex flex-col h-screen bg-background overflow-hidden pt-16">
-      <Navbar />
-      <ChatContainer />
-    </div>
-  );
-};
-
-export default Chat; */
-// src/pages/Chat.tsx (Versão Atualizada)
-import { useEffect, useState, useCallback } from "react"; // 1. useCallback added
+import { useEffect, useState, useCallback } from "react";
+import { get, post, del } from 'aws-amplify/api';
 import { getCurrentUser } from 'aws-amplify/auth';
-import { get, post } from 'aws-amplify/api';
 import Navbar from "@/components/Navbar";
 import ChatContainer from "@/components/ChatContainer";
 import { ChatSidebar } from "@/components/ChatSidebar";
@@ -55,7 +30,6 @@ const Chat = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
-  // 2. Combined initial data loading into a single, robust useEffect
   useEffect(() => {
     const initializeChat = async () => {
       setIsLoadingConversations(true);
@@ -67,22 +41,19 @@ const Chat = () => {
         const { body } = await restOperation.response;
         const data = await body.json() as Conversation[];
         setConversations(data);
-        // Bonus: Automatically select the first conversation if one exists
         if (data.length > 0) {
           setCurrentConversationId(data[0].id);
         }
       } catch (error) {
         console.error("❌ Error during initialization:", error);
         toast({ title: "Erro ao carregar seus dados.", variant: "destructive" });
-        // Could redirect to login here if error is from getCurrentUser
       } finally {
         setIsLoadingConversations(false);
       }
     };
     initializeChat();
-  }, [toast]); // Dependency array is minimal
+  }, [toast]);
 
-  // Fetch messages when conversation changes
   useEffect(() => {
     if (!currentConversationId) {
       setMessages([]);
@@ -105,7 +76,6 @@ const Chat = () => {
     fetchMessages();
   }, [currentConversationId, toast]);
 
-  // Create a new conversation
   const handleNewConversation = useCallback(async () => {
     try {
       const restOperation = post({ apiName: "ChatPersistence", path: "/chats", options: { body: { title: "Nova Conversa" } } });
@@ -119,9 +89,7 @@ const Chat = () => {
     }
   }, [toast]);
 
-  // Send a message
   const handleSendMessage = useCallback(async (prompt: string) => {
-    // 3. BUG FIX: Prevent sending empty prompts to the AI
     if (!prompt || prompt.trim() === '') {
       toast({ title: "A mensagem não pode estar vazia.", variant: "destructive" });
       return;
@@ -131,9 +99,7 @@ const Chat = () => {
       return;
     }
     setIsSendingMessage(true);
-
     const userMessage: Message = { content: prompt, role: 'user', createdAt: new Date().toISOString() };
-    // 4. FIX: Use an updater function to get the most recent state for the AI context
     setMessages(prevMessages => {
       const updatedMessages = [...prevMessages, userMessage];
       (async () => {
@@ -149,7 +115,6 @@ const Chat = () => {
         } catch (error) {
           console.error("Erro no fluxo de envio de mensagem:", error);
           toast({ title: "Erro ao enviar mensagem.", variant: "destructive" });
-          // Optional: Revert optimistic update on failure
           setMessages(prevMessages);
         } finally {
           setIsSendingMessage(false);
@@ -159,7 +124,29 @@ const Chat = () => {
     });
   }, [currentConversationId, toast]);
 
-  const handleDeleteConversation = async (id: string) => { /* ... */ };
+  // ✅ CORRIGIDO: O confirm() do navegador foi removido.
+  const handleDeleteConversation = useCallback(async (id: string) => {
+    try {
+      const restOperation = del({
+        apiName: "ChatPersistence",
+        path: `/chats/${id}`
+      });
+      await restOperation.response;
+
+      setConversations(prev => prev.filter(convo => convo.id !== id));
+
+      if (currentConversationId === id) {
+        setCurrentConversationId(null);
+        setMessages([]);
+      }
+
+      toast({ title: "Conversa excluída com sucesso." });
+
+    } catch (error) {
+      console.error("Erro ao excluir conversa:", error);
+      toast({ title: "Não foi possível excluir a conversa.", variant: "destructive" });
+    }
+  }, [currentConversationId, toast]);
 
   return (
     <SidebarProvider>

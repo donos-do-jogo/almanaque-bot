@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb');
+//const { DynamoDBDocumentClient, PutCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, QueryCommand, DeleteCommand, BatchWriteCommand } = require('@aws-sdk/lib-dynamodb');
 
 // --- Configuração do DynamoDB ---
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -132,6 +133,67 @@ app.post('/chats/:chatId/messages', async (req, res) => {
 	}
 });
 
+// DELETE /chats/:chatId -> Exclui uma conversa e todas as suas mensagens
+app.delete('/chats/:chatId', async (req, res) => {
+	const userId = getUserId(req);
+	if (!userId) return res.status(401).json({ error: 'Usuário não autorizado' });
+
+	const { chatId } = req.params;
+	if (!chatId) return res.status(400).json({ error: 'O ID do chat é obrigatório' });
+
+	try {
+		// ETAPA 1: Encontrar todas as mensagens da conversa
+		const queryMessagesParams = {
+			TableName: tableName,
+			KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
+			ExpressionAttributeValues: {
+				':pk': `CHAT#${chatId}`,
+				':sk': 'MESSAGE#'
+			},
+			// Apenas precisamos das chaves para deletar, não dos dados completos
+			ProjectionExpression: 'PK, SK'
+		};
+
+		const messagesToDelete = await docClient.send(new QueryCommand(queryMessagesParams));
+
+		// ETAPA 2: Deletar todas as mensagens em lote (se houver alguma)
+		if (messagesToDelete.Items && messagesToDelete.Items.length > 0) {
+			const deleteRequests = messagesToDelete.Items.map(item => ({
+				DeleteRequest: {
+					Key: { PK: item.PK, SK: item.SK }
+				}
+			}));
+
+			// O DynamoDB permite deletar até 25 itens por chamada de lote
+			const batchDeleteParams = {
+				RequestItems: {
+					[tableName]: deleteRequests
+				}
+			};
+			await docClient.send(new BatchWriteCommand(batchDeleteParams));
+			console.log(`Foram deletadas ${deleteRequests.length} mensagens para o chat ${chatId}.`);
+		}
+
+		// ETAPA 3: Deletar o item principal da conversa
+		const deleteChatParams = {
+			TableName: tableName,
+			Key: {
+				PK: `USER#${userId}`, // Garante que o usuário só pode deletar seus próprios chats
+				SK: `CHAT#${chatId}`
+			}
+		};
+
+		await docClient.send(new DeleteCommand(deleteChatParams));
+		console.log(`A conversa ${chatId} foi deletada com sucesso.`);
+
+		// Responde com 204 No Content, que é o padrão para uma exclusão bem-sucedida
+		res.status(204).send();
+
+	} catch (err) {
+		console.error("Erro ao deletar a conversa:", err);
+		res.status(500).json({ error: 'Não foi possível deletar a conversa' });
+	}
+});
 
 // Exporta o app para o aws-serverless-express
 module.exports = app;
