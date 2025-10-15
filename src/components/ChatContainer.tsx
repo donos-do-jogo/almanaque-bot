@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+/*import React, { useState, useRef, useEffect, useCallback } from "react";
 import { post } from "aws-amplify/api";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
@@ -131,29 +131,79 @@ export default function ChatContainer(): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen w-full">
-      {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto w-full px-6 py-6">
-        <div className="max-w-screen-xl mx-auto flex flex-col gap-4">
-          {messages.map((m) => (
-            <ChatMessage
-              key={m.id}
-              message={m.text}
-              isBot={m.isBot}
-              timestamp={m.timestamp}
-            />
-          ))}
-          {isTyping && <TypingIndicator />}
-          <div ref={messagesEndRef} />
-        </div>
+    <div className="flex flex-col h-screen w-full"> */
+//{/* Chat messages */}
+/*<div className="flex-1 overflow-y-auto w-full px-6 py-6">
+  <div className="max-w-screen-xl mx-auto flex flex-col gap-4">
+    {messages.map((m) => (
+      <ChatMessage
+        key={m.id}
+        message={m.text}
+        isBot={m.isBot}
+        timestamp={m.timestamp}
+      />
+    ))}
+    {isTyping && <TypingIndicator />}
+    <div ref={messagesEndRef} />
+  </div>
+</div>
+
+// {/* Chat input }
+/* <div className="w-full border-t p-4">
+  <div className="max-w-screen-xl mx-auto">
+    <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
+  </div>
+</div>
+</div>
+);
+} */
+
+// src/components/ChatContainer.tsx (Versão Simplificada)
+
+import React, { useRef, useEffect } from "react";
+import ChatMessage from "./ChatMessage";
+import ChatInput from "./ChatInput";
+import TypingIndicator from "./TypingIndicator";
+import { Message } from "@/pages/Chat"; // Importar a interface do Chat.tsx
+
+interface ChatContainerProps {
+  messages: Message[];
+  onSendMessage: (message: string) => void;
+  isLoading: boolean; // Para mostrar um loader geral
+  isSending: boolean; // Para o typing indicator e desabilitar o input
+}
+
+export default function ChatContainer({ messages, onSendMessage, isLoading, isSending }: ChatContainerProps): JSX.Element {
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll automático
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isSending]);
+
+  // Se estiver carregando o histórico, mostre um loader
+  if (isLoading) {
+    return <div className="flex-1 flex items-center justify-center">Carregando histórico...</div>;
+  }
+
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Mensagens */}
+      <div className="flex-1 overflow-y-auto p-6">
+        {messages.map((m, index) => (
+          <ChatMessage
+            key={`${m.createdAt}-${index}`} // Usar uma chave mais robusta
+            message={m.content}
+            isBot={m.role === 'assistant'}
+            timestamp={new Date(m.createdAt)}
+          />
+        ))}
+        {isSending && <TypingIndicator />}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Chat input */}
-      <div className="w-full border-t p-4">
-        <div className="max-w-screen-xl mx-auto">
-          <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
-        </div>
-      </div>
+      {/* Input */}
+      <ChatInput onSendMessage={onSendMessage} disabled={isSending} />
     </div>
   );
 }

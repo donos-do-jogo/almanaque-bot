@@ -1,0 +1,9 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "storageChatdbName",
+      "environmentVariableName": "STORAGE_CHATDB_NAME"
+    }
+  ]
+}

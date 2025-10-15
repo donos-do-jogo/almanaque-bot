@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"Amplify\",\"createdWith\":\"14.0.2\",\"stackType\":\"function-Lambda\",\"metadata\":{\"whyContinueWithGen1\":\"Prefer not to answer\"}}",
+  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"Amplify\",\"createdWith\":\"14.1.1\",\"stackType\":\"function-Lambda\",\"metadata\":{\"whyContinueWithGen1\":\"Prefer not to answer\"}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -16,13 +16,7 @@
     "s3Key": {
       "Type": "String"
     },
-    "genApiKey": {
-      "Type": "String"
-    },
-    "systemPrompt": {
-      "Type": "String"
-    },
-    "geminiModel": {
+    "storageChatdbName": {
       "Type": "String"
     }
   },
@@ -56,12 +50,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "apiHandler",
+            "postAccountConfirmation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "apiHandler",
+                  "postAccountConfirmation",
                   "-",
                   {
                     "Ref": "env"
@@ -79,14 +73,8 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "GEN_API_KEY": {
-              "Ref": "genApiKey"
-            },
-            "SYSTEM_PROMPT": {
-              "Ref": "systemPrompt"
-            },
-            "GEMINI_MODEL": {
-              "Ref": "geminiModel"
+            "STORAGE_CHATDB_NAME": {
+              "Ref": "storageChatdbName"
             }
           }
         },
@@ -107,12 +95,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "almanaquebotLambdaRoled8ea3976",
+            "almanaquebotLambdaRole6f48a42b",
             {
               "Fn::Join": [
                 "",
                 [
-                  "almanaquebotLambdaRoled8ea3976",
+                  "almanaquebotLambdaRole6f48a42b",
                   "-",
                   {
                     "Ref": "env"
