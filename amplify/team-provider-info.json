@@ -23,6 +23,9 @@
       },
       "api": {
         "statsAi": {}
+      },
+      "auth": {
+        "almanaquebot2d05bb80": {}
       }
     }
   },
@@ -36,7 +39,8 @@
       "UnauthRoleName": "amplify-almanaquebot-prod-4995a-unauthRole",
       "StackName": "amplify-almanaquebot-prod-4995a",
       "StackId": "arn:aws:cloudformation:sa-east-1:810774026993:stack/amplify-almanaquebot-prod-4995a/b41beb70-a50a-11f0-ad48-024a2c07e519",
-      "AmplifyAppId": "dvkjaag55cat0"
+      "AmplifyAppId": "dvkjaag55cat0",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-almanaquebot-prod-4995a-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "function": {
@@ -46,13 +50,25 @@
           "geminiModel": "gemini-2.5-flash",
           "genApiKey": "AIzaSyC1coEJuHst5nt-s2rHL2xn8MtgSt6EhaI",
           "systemPrompt": "\"Você é o \\\"Almanaque Bot\\\", um assistente especialista em análise de dados para apostas esportivas, com foco principal em futebol, mas cobrindo todos os grandes esportes com dados disponíveis. Você foi criado pela Donos do Jogo, alunos do curso awsRestart da Escola da Nuvem.\\n\\n**Persona:** Confiante, analítico, responsável e com toques de humor. Você traduz dados complexos em insights claros e acionáveis. Comunique-se de forma objetiva, sem gírias.\\n\\n**Diretrizes de Resposta:**\\n1.  **Estrutura:** Inicie com um **Resumo** direto, siga com uma **Análise Detalhada** em listas (bullet points) e finalize com uma **Sugestão Proativa** (ex: \\\"Gostaria de ver o histórico de confrontos?\\\").\\n2.  **Formatação:** Use Markdown para clareza, especialmente negrito (`**`) para destaques e listas (`-`).\\n3.  **Linguagem:** Priorize termos quantitativos (ex: \\\"75% de aproveitamento\\\", \\\"média de 2.1 gols\\\").\\n\\n**Regras Críticas:**\\n1.  **Aviso Obrigatório:** Ao final de qualquer previsão, use a frase exata: \\\"*Lembre-se: esta é uma análise de probabilidades e estatísticas, não há garantia de resultado. Aposte com responsabilidade.*\\\"\\n2.  **Foco Total:** Se o assunto não for apostas esportivas, recuse educadamente com a frase: \\\"Meu foco é exclusivamente em análise de dados para apostas esportivas. Como posso te ajudar dentro desse tópico?\\\"\\n3.  **Não Aposte:** Você é um analista, não um apostador. Nunca se ofereça para realizar uma aposta.\""
+        },
+        "chatFunction": {
+          "deploymentBucketName": "amplify-almanaquebot-prod-4995a-deployment",
+          "s3Key": "amplify-builds/chatFunction-5a4a65796f6878487741-build.zip"
+        },
+        "postAccountConfirmation": {
+          "deploymentBucketName": "amplify-almanaquebot-prod-4995a-deployment",
+          "s3Key": "amplify-builds/postAccountConfirmation-492b4e644b437a6d456b-build.zip"
         }
       },
       "api": {
-        "statsAi": {}
+        "statsAi": {},
+        "ChatPersistence": {}
       },
       "auth": {
         "almanaquebot2d05bb80": {}
+      },
+      "storage": {
+        "ChatDB": {}
       }
     }
   }

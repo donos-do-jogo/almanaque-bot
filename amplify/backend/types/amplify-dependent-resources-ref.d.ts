@@ -1,5 +1,10 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
+    "ChatPersistence": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "statsAi": {
       "ApiId": "string",
       "ApiName": "string",
@@ -24,6 +29,32 @@ export type AmplifyDependentResourcesAttributes = {
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
+    },
+    "chatFunction": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "postAccountConfirmation": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    }
+  },
+  "storage": {
+    "ChatDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "SortKeyName": "string",
+      "SortKeyType": "string",
+      "StreamArn": "string"
     }
   }
 }
