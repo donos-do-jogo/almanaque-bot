@@ -1,19 +1,5 @@
 {
   "api": {
-    "ChatPersistence": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "chatFunction"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "statsAi": {
       "dependsOn": [
         {
@@ -62,27 +48,6 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    },
-    "chatFunction": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ],
-          "category": "storage",
-          "resourceName": "ChatDB"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "postAccountConfirmation": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "parameters": {
@@ -125,44 +90,6 @@
           "resourceName": "apiHandler"
         }
       ]
-    },
-    "AMPLIFY_function_chatFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "chatFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_chatFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "chatFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_postAccountConfirmation_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "postAccountConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_postAccountConfirmation_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "postAccountConfirmation"
-        }
-      ]
-    }
-  },
-  "storage": {
-    "ChatDB": {
-      "providerPlugin": "awscloudformation",
-      "service": "DynamoDB"
     }
   }
 }
