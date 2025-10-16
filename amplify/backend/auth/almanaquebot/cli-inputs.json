@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "almanaquebot2d05bb80_identitypool_2d05bb80",
+    "identityPoolName": "almanaquebot_identitypool_4863921e",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "almana2d05bb80",
-    "userPoolName": "almanaquebot2d05bb80_userpool_2d05bb80",
+    "resourceNameTruncated": "almana4863921e",
+    "userPoolName": "almanaquebot_userpool_4863921e",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,18 +31,12 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "almana2d05bb80_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "almana4863921e_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "2d05bb80",
-    "resourceName": "almanaquebot2d05bb80",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "default",
-    "usernameAttributes": [
-      "email"
-    ],
-    "userPoolGroupList": [],
+    "resourceName": "almanaquebot",
+    "sharedId": "4863921e",
     "serviceName": "Cognito",
-    "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useDefault": "manual"
   }
 }

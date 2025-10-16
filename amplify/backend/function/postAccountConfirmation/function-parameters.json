@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "ChatDB": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
