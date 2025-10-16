@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { Trophy, KeyRound, Lock, Eye, EyeOff } from "lucide-react";
-// ALTERAÇÃO AQUI: A função agora é 'confirmResetPassword'
 import { confirmResetPassword } from 'aws-amplify/auth';
+import { PasswordStrength } from "@/components/ui/PasswordStrength"; // 1. Importar o componente
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -19,6 +19,9 @@ const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [showPasswords, setShowPasswords] = useState(false);
+
+  // 2. Estado para controlar a visibilidade da validação
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const handleResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,7 +36,6 @@ const ResetPassword = () => {
     }
     setIsLoading(true);
     try {
-      // ALTERAÇÃO AQUI: Chamando a função correta
       await confirmResetPassword({
         username: state.username,
         confirmationCode: code,
@@ -54,21 +56,9 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "1s" }} />
-      </div>
-
+      {/* ... layout de fundo ... */}
       <div className="w-full max-w-md mx-auto relative z-10 space-y-8 animate-fade-in">
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-3 text-primary justify-center">
-            <Trophy className="w-12 h-12" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              Almanaque Bot
-            </h1>
-          </div>
-        </div>
-
+        {/* ... cabeçalho ... */}
         <Card className="border-2 shadow-xl backdrop-blur-sm bg-card/95">
           <form onSubmit={handleResetPassword}>
             <CardHeader>
@@ -95,17 +85,14 @@ const ResetPassword = () => {
                     className="pl-10 pr-12"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    onFocus={() => setIsTypingPassword(true)}
                   />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
-                    onClick={() => setShowPasswords(!showPasswords)}
-                  >
+                  <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent" onClick={() => setShowPasswords(!showPasswords)}>
                     {showPasswords ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </Button>
                 </div>
+                {/* 3. Renderizar o componente de validação */}
+                {isTypingPassword && <PasswordStrength password={newPassword} />}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirm-new-password">Confirmar Nova Senha</Label>
@@ -120,13 +107,7 @@ const ResetPassword = () => {
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
                   />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
-                    onClick={() => setShowPasswords(!showPasswords)}
-                  >
+                  <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent" onClick={() => setShowPasswords(!showPasswords)}>
                     {showPasswords ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </Button>
                 </div>

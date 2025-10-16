@@ -9,20 +9,26 @@ import { useToast } from "@/components/ui/use-toast";
 import { Trophy, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { signIn, signUp } from 'aws-amplify/auth';
 import { useAuth } from '@/context/AuthContext';
+import { PasswordStrength } from "@/components/ui/PasswordStrength"; // Importando o novo componente
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
+  // Estados para os campos dos formulários
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
 
+  // Estados para visibilidade da senha
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPasswords, setShowSignupPasswords] = useState(false);
+
+  // Estado para controlar quando mostrar a validação de senha
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const { isAuthenticated } = useAuth();
 
@@ -123,7 +129,6 @@ const Auth = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <Label htmlFor="login-password">Senha</Label>
-                      {/* INÍCIO DA ALTERAÇÃO */}
                       <Button
                         type="button"
                         variant="link"
@@ -132,7 +137,6 @@ const Auth = () => {
                       >
                         Esqueceu a senha?
                       </Button>
-                      {/* FIM DA ALTERAÇÃO */}
                     </div>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -188,17 +192,13 @@ const Auth = () => {
                         className="pr-12"
                         value={signupPassword}
                         onChange={(e) => setSignupPassword(e.target.value)}
+                        onFocus={() => setIsTypingPassword(true)}
                       />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
-                        onClick={() => setShowSignupPasswords(!showSignupPasswords)}
-                      >
+                      <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent" onClick={() => setShowSignupPasswords(!showSignupPasswords)}>
                         {showSignupPasswords ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </Button>
                     </div>
+                    {isTypingPassword && <PasswordStrength password={signupPassword} />}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-confirm-password">Confirmar Senha</Label>
@@ -212,13 +212,7 @@ const Auth = () => {
                         value={signupConfirmPassword}
                         onChange={(e) => setSignupConfirmPassword(e.target.value)}
                       />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
-                        onClick={() => setShowSignupPasswords(!showSignupPasswords)}
-                      >
+                      <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent" onClick={() => setShowSignupPasswords(!showSignupPasswords)}>
                         {showSignupPasswords ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </Button>
                     </div>
