@@ -6,28 +6,27 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { Trophy, Mail, Lock } from "lucide-react";
+import { Trophy, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { signIn, signUp } from 'aws-amplify/auth';
-import { useAuth } from '@/context/AuthContext'; // Importar o hook de autenticação
+import { useAuth } from '@/context/AuthContext';
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Estados para os campos dos formulários
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
 
-  // Obter o estado de autenticação do nosso contexto
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPasswords, setShowSignupPasswords] = useState(false);
+
   const { isAuthenticated } = useAuth();
 
-  // Efeito que reage à mudança de autenticação
   useEffect(() => {
-    // Se o usuário estiver autenticado, redireciona para o chat.
     if (isAuthenticated) {
       navigate('/chat', { replace: true });
     }
@@ -40,7 +39,6 @@ const Auth = () => {
       const { isSignedIn } = await signIn({ username: loginEmail, password: loginPassword });
       if (isSignedIn) {
         toast({ title: "Login bem-sucedido!", description: "Redirecionando para o chat..." });
-        // O redirecionamento agora é tratado pelo useEffect
       }
     } catch (error: any) {
       toast({
@@ -123,10 +121,39 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">Senha</Label>
+                    <div className="flex justify-between items-center">
+                      <Label htmlFor="login-password">Senha</Label>
+                      {/* INÍCIO DA ALTERAÇÃO */}
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="p-0 h-auto font-normal text-sm text-primary hover:underline"
+                        onClick={() => navigate('/forgot-password')}
+                      >
+                        Esqueceu a senha?
+                      </Button>
+                      {/* FIM DA ALTERAÇÃO */}
+                    </div>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                      <Input id="login-password" type="password" placeholder="Sua senha" required className="pl-10" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+                      <Input
+                        id="login-password"
+                        type={showLoginPassword ? "text" : "password"}
+                        placeholder="Sua senha"
+                        required
+                        className="pl-10 pr-12"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      >
+                        {showLoginPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -152,11 +179,49 @@ const Auth = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Senha</Label>
-                    <Input id="signup-password" type="password" placeholder="Crie uma senha forte" required value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} />
+                    <div className="relative">
+                      <Input
+                        id="signup-password"
+                        type={showSignupPasswords ? "text" : "password"}
+                        placeholder="Crie uma senha forte"
+                        required
+                        className="pr-12"
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
+                        onClick={() => setShowSignupPasswords(!showSignupPasswords)}
+                      >
+                        {showSignupPasswords ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </Button>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-confirm-password">Confirmar Senha</Label>
-                    <Input id="signup-confirm-password" type="password" placeholder="Confirme sua senha" required value={signupConfirmPassword} onChange={(e) => setSignupConfirmPassword(e.target.value)} />
+                    <div className="relative">
+                      <Input
+                        id="signup-confirm-password"
+                        type={showSignupPasswords ? "text" : "password"}
+                        placeholder="Confirme sua senha"
+                        required
+                        className="pr-12"
+                        value={signupConfirmPassword}
+                        onChange={(e) => setSignupConfirmPassword(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
+                        onClick={() => setShowSignupPasswords(!showSignupPasswords)}
+                      >
+                        {showSignupPasswords ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter>

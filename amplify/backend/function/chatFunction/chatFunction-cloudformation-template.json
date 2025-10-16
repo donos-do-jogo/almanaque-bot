@@ -27,6 +27,9 @@
     "storageChatDBStreamArn": {
       "Type": "String",
       "Default": "storageChatDBStreamArn"
+    },
+    "geminiApiKey": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -90,6 +93,9 @@
             },
             "STORAGE_CHATDB_STREAMARN": {
               "Ref": "storageChatDBStreamArn"
+            },
+            "GEMINI_API_KEY": {
+              "Ref": "geminiApiKey"
             }
           }
         },

@@ -143,6 +143,14 @@
         }
       ]
     },
+    "AMPLIFY_function_chatFunction_geminiApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chatFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_chatFunction_s3Key": {
       "usedBy": [
         {

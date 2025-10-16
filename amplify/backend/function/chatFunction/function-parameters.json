@@ -9,5 +9,11 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "geminiApiKey",
+      "environmentVariableName": "GEMINI_API_KEY"
+    }
+  ]
 }

@@ -66,7 +66,8 @@
         },
         "chatFunction": {
           "deploymentBucketName": "amplify-almanaquebot-prod-4995a-deployment",
-          "s3Key": "amplify-builds/chatFunction-4e494b6450695543556f-build.zip"
+          "s3Key": "amplify-builds/chatFunction-4e494b6450695543556f-build.zip",
+          "geminiApiKey": "AIzaSyC1coEJuHst5nt-s2rHL2xn8MtgSt6EhaI"
         },
         "ChatDB": {},
         "postAccountConfirmation": {
