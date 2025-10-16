@@ -14,9 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Conversation } from "@/pages/Chat"; // Verifique se o caminho para seu arquivo Chat.tsx está correto
-
-// 1. Importa o novo componente de diálogo
+import { Conversation } from "@/pages/Chat";
 import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 
 interface ChatSidebarProps {
@@ -36,33 +34,28 @@ export function ChatSidebar({
 }: ChatSidebarProps) {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  // 2. Adiciona estados para controlar o diálogo
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null);
 
-  // Função para abrir o diálogo e guardar o ID da conversa a ser deletada
   const handleDeleteClick = (id: string) => {
     setConversationToDelete(id);
     setIsDialogOpen(true);
   };
 
-  // Função chamada quando a exclusão é confirmada dentro do diálogo
   const handleConfirmDelete = () => {
     if (conversationToDelete) {
       onDeleteConversation(conversationToDelete);
     }
-    // Fecha o diálogo e limpa o estado
     setIsDialogOpen(false);
     setConversationToDelete(null);
   };
 
   return (
     <>
-      <Sidebar className={isCollapsed ? "w-14" : "w-64"} collapsible="icon">
+      <Sidebar className={isCollapsed ? "w-15" : "w-72"} collapsible="icon">
         <div className="flex flex-col h-full">
-          {/* ... (código do cabeçalho e botão 'Nova Conversa' permanece o mesmo) ... */}
           <div className="flex items-center justify-between p-4 border-b">
             {!isCollapsed && <h2 className="font-semibold text-lg">Conversas</h2>}
             <SidebarTrigger />
@@ -89,12 +82,15 @@ export function ChatSidebar({
                         <SidebarMenuButton
                           onClick={() => onSelectConversation(conversation.id)}
                           isActive={currentConversationId === conversation.id}
-                          className="flex justify-between items-center w-full"
+                          className="flex w-full justify-between items-center gap-2"
                         >
                           <div className="flex items-center gap-2 overflow-hidden">
                             <MessageSquare className="h-4 w-4 shrink-0" />
                             {!isCollapsed && (
-                              <p className="truncate text-sm font-medium">{conversation.title}</p>
+                              // --- ✅ A CORREÇÃO ESTÁ AQUI ---
+                              <p className="truncate text-sm font-medium text-left max-w-[180px]">
+                                {conversation.title}
+                              </p>
                             )}
                           </div>
 
@@ -103,7 +99,6 @@ export function ChatSidebar({
                               variant="ghost"
                               size="icon"
                               className="h-6 w-6 shrink-0"
-                              // 3. O clique agora abre o diálogo em vez de deletar diretamente
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteClick(conversation.id);
@@ -123,12 +118,10 @@ export function ChatSidebar({
         </div>
       </Sidebar>
 
-      {/* 4. Renderiza o componente de diálogo aqui */}
       <DeleteConfirmationDialog
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         onConfirm={handleConfirmDelete}
-        onCancel={() => setConversationToDelete(null)}
       />
     </>
   );

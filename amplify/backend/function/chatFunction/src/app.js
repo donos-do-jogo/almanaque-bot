@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 //const { DynamoDBDocumentClient, PutCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, QueryCommand, DeleteCommand, BatchWriteCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, QueryCommand, DeleteCommand, BatchWriteCommand, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
 
 // --- Configuração do DynamoDB ---
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -66,7 +66,13 @@ app.get('/chats', async (req, res) => {
 
 	try {
 		const data = await docClient.send(new QueryCommand(params));
-		res.json(data.Items);
+		const sortedItems = data.Items.sort((a, b) => {
+			const dateA = new Date(a.updatedAt || a.createdAt);
+			const dateB = new Date(b.updatedAt || b.createdAt);
+			return dateB - dateA;
+		});
+
+		res.json(sortedItems);
 	} catch (err) {
 		console.error("Erro ao buscar chats:", err);
 		res.status(500).json({ error: 'Não foi possível buscar os chats' });
@@ -114,21 +120,49 @@ app.get('/chats/:chatId/messages', async (req, res) => {
 });
 
 app.post('/chats/:chatId/messages', async (req, res) => {
+	const userId = getUserId(req); // Precisamos do userId para atualizar o chat
+	if (!userId) return res.status(401).json({ error: 'Usuário não autorizado' });
+
 	const { chatId } = req.params;
 	const { content, role } = req.body;
-	const item = {
+	const timestamp = new Date().toISOString();
+
+	const messageItem = {
 		PK: `CHAT#${chatId}`,
-		SK: `MESSAGE#${new Date().toISOString()}`,
+		SK: `MESSAGE#${timestamp}`,
 		type: 'Message',
 		content,
 		role,
-		createdAt: new Date().toISOString(),
+		createdAt: timestamp,
 	};
+
 	try {
-		await docClient.send(new PutCommand({ TableName: tableName, Item: item }));
-		res.status(201).json(item);
+		// ETAPA 1: Salva a nova mensagem como antes
+		await docClient.send(new PutCommand({ TableName: tableName, Item: messageItem }));
+
+		// --- ✅ ETAPA 2: ATUALIZA O ITEM DA CONVERSA "PAI" ---
+		const updateChatParams = {
+			TableName: tableName,
+			Key: {
+				PK: `USER#${userId}`,
+				SK: `CHAT#${chatId}`
+			},
+			// Define o atributo 'updatedAt' com o carimbo de data/hora da nova mensagem
+			UpdateExpression: "set #updatedAt = :timestamp",
+			ExpressionAttributeNames: {
+				"#updatedAt": "updatedAt"
+			},
+			ExpressionAttributeValues: {
+				":timestamp": timestamp
+			}
+		};
+
+		await docClient.send(new UpdateCommand(updateChatParams));
+
+		res.status(201).json(messageItem);
+
 	} catch (err) {
-		console.error("Erro ao salvar mensagem:", err);
+		console.error("Erro ao salvar mensagem e atualizar chat:", err);
 		res.status(500).json({ error: 'Não foi possível salvar a mensagem' });
 	}
 });

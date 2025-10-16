@@ -189,7 +189,7 @@ export default function ChatContainer({ messages, onSendMessage, isLoading, isSe
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Mensagens */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-10">
         {messages.map((m, index) => (
           <ChatMessage
             key={`${m.createdAt}-${index}`} // Usar uma chave mais robusta

@@ -1,4 +1,4 @@
-// src/pages/Chat.tsx (Versão Final Corrigida)
+// src/pages/Chat.tsx (Versão Final com Layout Corrigido)
 
 import { useEffect, useState, useCallback } from "react";
 import { get, post, del } from 'aws-amplify/api';
@@ -30,13 +30,12 @@ const Chat = () => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
+  // ... (todas as suas funções e hooks como useEffect, handleSendMessage, etc. permanecem exatamente iguais) ...
   useEffect(() => {
     const initializeChat = async () => {
       setIsLoadingConversations(true);
       try {
         await getCurrentUser();
-        console.log("✅ User is authenticated");
-
         const restOperation = get({ apiName: "ChatPersistence", path: "/chats" });
         const { body } = await restOperation.response;
         const data = await body.json() as Conversation[];
@@ -77,71 +76,93 @@ const Chat = () => {
   }, [currentConversationId, toast]);
 
   const handleNewConversation = useCallback(async () => {
-    try {
-      const restOperation = post({ apiName: "ChatPersistence", path: "/chats", options: { body: { title: "Nova Conversa" } } });
-      const { body } = await restOperation.response;
-      const newConversation = await body.json();
-      setConversations(prev => [newConversation, ...prev]);
-      setCurrentConversationId(newConversation.id);
-    } catch (error) {
-      console.error("Erro ao criar nova conversa:", error);
-      toast({ title: "Não foi possível iniciar uma nova conversa.", variant: "destructive" });
-    }
-  }, [toast]);
+    setCurrentConversationId(null);
+    setMessages([]);
+  }, []);
 
   const handleSendMessage = useCallback(async (prompt: string) => {
     if (!prompt || prompt.trim() === '') {
       toast({ title: "A mensagem não pode estar vazia.", variant: "destructive" });
       return;
     }
-    if (!currentConversationId) {
-      toast({ title: "Selecione ou crie uma conversa para começar.", variant: "default" });
-      return;
-    }
     setIsSendingMessage(true);
-    const userMessage: Message = { content: prompt, role: 'user', createdAt: new Date().toISOString() };
-    setMessages(prevMessages => {
-      const updatedMessages = [...prevMessages, userMessage];
-      (async () => {
-        try {
-          await post({ apiName: "ChatPersistence", path: `/chats/${currentConversationId}/messages`, options: { body: userMessage } }).response;
-          const restOperation = post({ apiName: "statsAi", path: "/chat", options: { body: { prompt, history: updatedMessages } } });
-          const { body } = await restOperation.response;
-          const botData = await body.json();
-          const botResponseContent = botData.response || "Desculpe, não consegui processar a resposta.";
-          const botMessage: Message = { content: botResponseContent, role: 'assistant', createdAt: new Date().toISOString() };
-          await post({ apiName: "ChatPersistence", path: `/chats/${currentConversationId}/messages`, options: { body: botMessage } }).response;
-          setMessages(prev => [...prev, botMessage]);
-        } catch (error) {
-          console.error("Erro no fluxo de envio de mensagem:", error);
-          toast({ title: "Erro ao enviar mensagem.", variant: "destructive" });
-          setMessages(prevMessages);
-        } finally {
-          setIsSendingMessage(false);
-        }
-      })();
-      return updatedMessages;
-    });
-  }, [currentConversationId, toast]);
 
-  // ✅ CORRIGIDO: O confirm() do navegador foi removido.
+    const isNewConversation = !currentConversationId;
+    const userMessage: Message = { content: prompt, role: 'user', createdAt: new Date().toISOString() };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+
+    let conversationId = currentConversationId;
+    let finalMessages: Message[] = [];
+
+    try {
+      if (isNewConversation) {
+        const titleResponse = await post({ apiName: "statsAi", path: "/chat", options: { body: { prompt } } }).response;
+        const titleData = await titleResponse.body.json();
+        const newTitle = titleData.title || "Nova Conversa";
+
+        const createChatResponse = await post({ apiName: "ChatPersistence", path: "/chats", options: { body: { title: newTitle } } }).response;
+        const newConversation = await createChatResponse.body.json();
+        conversationId = newConversation.id;
+
+        await post({ apiName: "ChatPersistence", path: `/chats/${conversationId}/messages`, options: { body: userMessage } }).response;
+
+        const chatResponse = await post({ apiName: "statsAi", path: "/chat", options: { body: { prompt, history: [userMessage] } } }).response;
+        const botData = await chatResponse.body.json();
+        const botResponseContent = botData.response || "Desculpe, não consegui processar a resposta.";
+        const botMessage: Message = { content: botResponseContent, role: 'assistant', createdAt: new Date().toISOString() };
+
+        await post({ apiName: "ChatPersistence", path: `/chats/${conversationId}/messages`, options: { body: botMessage } }).response;
+
+        setConversations(prev => [newConversation, ...prev]);
+        finalMessages = [userMessage, botMessage];
+
+      } else {
+        if (!conversationId) throw new Error("ID da conversa é nulo.");
+
+        const historyForAI = [...messages, userMessage];
+
+        await post({ apiName: "ChatPersistence", path: `/chats/${conversationId}/messages`, options: { body: userMessage } }).response;
+        const chatResponse = await post({ apiName: "statsAi", path: "/chat", options: { body: { prompt, history: historyForAI } } }).response;
+        const botData = await chatResponse.body.json();
+        const botResponseContent = botData.response || "Desculpe, não consegui processar a resposta.";
+        const botMessage: Message = { content: botResponseContent, role: 'assistant', createdAt: new Date().toISOString() };
+
+        setMessages(prev => [...prev, botMessage]);
+        await post({ apiName: "ChatPersistence", path: `/chats/${conversationId}/messages`, options: { body: botMessage } }).response;
+
+        setConversations(prev => {
+          const conversationToMove = prev.find(c => c.id === conversationId);
+          if (!conversationToMove) return prev;
+          const otherConversations = prev.filter(c => c.id !== conversationId);
+          return [conversationToMove, ...otherConversations];
+        });
+      }
+
+      if (isNewConversation && conversationId) {
+        setCurrentConversationId(conversationId);
+        setMessages(finalMessages);
+      }
+
+    } catch (error) {
+      console.error("Erro no fluxo de envio de mensagem:", error);
+      toast({ title: "Erro ao enviar mensagem.", variant: "destructive" });
+      setMessages(prev => prev.filter(msg => msg.createdAt !== userMessage.createdAt));
+    } finally {
+      setIsSendingMessage(false);
+    }
+  }, [currentConversationId, messages, toast]);
+
   const handleDeleteConversation = useCallback(async (id: string) => {
     try {
-      const restOperation = del({
-        apiName: "ChatPersistence",
-        path: `/chats/${id}`
-      });
+      const restOperation = del({ apiName: "ChatPersistence", path: `/chats/${id}` });
       await restOperation.response;
-
       setConversations(prev => prev.filter(convo => convo.id !== id));
-
       if (currentConversationId === id) {
         setCurrentConversationId(null);
         setMessages([]);
       }
-
       toast({ title: "Conversa excluída com sucesso." });
-
     } catch (error) {
       console.error("Erro ao excluir conversa:", error);
       toast({ title: "Não foi possível excluir a conversa.", variant: "destructive" });
@@ -150,7 +171,8 @@ const Chat = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full bg-background overflow-hidden">
+      {/* --- ✅ INÍCIO DA CORREÇÃO DE LAYOUT --- */}
+      <div className="flex h-screen w-full bg-background">
         <ChatSidebar
           conversations={conversations}
           currentConversationId={currentConversationId}
@@ -158,7 +180,11 @@ const Chat = () => {
           onNewConversation={handleNewConversation}
           onDeleteConversation={handleDeleteConversation}
         />
-        <div className="flex flex-col flex-1 h-screen overflow-hidden pt-16">
+
+        {/* Este 'main' é o container principal do seu chat. */}
+        {/* 'flex-1' faz com que ele ocupe todo o espaço restante. */}
+        {/* 'overflow-hidden' previne barras de rolagem duplas. */}
+        <main className="flex-1 flex flex-col overflow-hidden">
           <Navbar />
           <ChatContainer
             messages={messages}
@@ -166,8 +192,9 @@ const Chat = () => {
             isLoading={isLoadingMessages}
             isSending={isSendingMessage}
           />
-        </div>
+        </main>
       </div>
+      {/* --- FIM DA CORREÇÃO DE LAYOUT --- */}
     </SidebarProvider>
   );
 };
