@@ -26,13 +26,16 @@ Seu analista pessoal de apostas esportivas. Nossa IA é capaz de acessar e entre
   - Amazon API Gateway
   - Amazon WAF
   - Amazon S3
-  - Boto 3 
+  - Boto 3
+  - AWS Open Search
+  - AWS Cognito
 - **Outros**: Docker, React
 
 ---
 
 ## 🏗️ Arquitetura
-<img width="834" height="586" alt="arqadjusted" src="https://github.com/user-attachments/assets/386419b6-8d90-406f-a3e1-2b7b9c427115" />
+
+<img width="1445" height="726" alt="Arquitetura-V4" src="https://github.com/user-attachments/assets/4b01f302-06d0-44e6-be56-616178d2d856" />
 
 ---
 
