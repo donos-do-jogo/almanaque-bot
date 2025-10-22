@@ -1,6 +1,19 @@
 [
   {
-    "Action": [],
-    "Resource": []
+    "Action": [
+      "ssm:GetParameter"
+    ],
+    "Resource": [
+      "arn:aws:ssm:sa-east-1:810774026993:parameter/amplify/*",
+      "arn:aws:ssm:sa-east-1:810774026993:parameter/prod/*" 
+    ]
+  },
+  {
+    "Action": [
+      "kms:Decrypt"
+    ],
+    "Resource": [
+      "*"
+    ]
   }
 ]

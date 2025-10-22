@@ -111,7 +111,7 @@
         }
       ]
     },
-    "AMPLIFY_function_apiHandler_genApiKey": {
+    "AMPLIFY_function_apiHandler_s3Key": {
       "usedBy": [
         {
           "category": "function",
@@ -119,7 +119,7 @@
         }
       ]
     },
-    "AMPLIFY_function_apiHandler_s3Key": {
+    "AMPLIFY_function_apiHandler_secretsPathAmplifyAppId": {
       "usedBy": [
         {
           "category": "function",
@@ -136,14 +136,6 @@
       ]
     },
     "AMPLIFY_function_chatFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "chatFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_chatFunction_geminiApiKey": {
       "usedBy": [
         {
           "category": "function",

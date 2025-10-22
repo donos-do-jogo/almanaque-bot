@@ -2,16 +2,15 @@
   "lambdaLayers": [],
   "environmentVariableList": [
     {
-      "cloudFormationParameterName": "systemPrompt",
-      "environmentVariableName": "SYSTEM_PROMPT"
-    },
-    {
       "cloudFormationParameterName": "geminiModel",
       "environmentVariableName": "GEMINI_MODEL"
     },
     {
-      "cloudFormationParameterName": "genApiKey",
-      "environmentVariableName": "GEN_API_KEY"
+      "cloudFormationParameterName": "systemPrompt",
+      "environmentVariableName": "SYSTEM_PROMPT"
     }
+  ],
+  "secretNames": [
+    "AI_ANALYST_API_KEY"
   ]
 }

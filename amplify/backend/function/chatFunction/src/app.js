@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-//const { DynamoDBDocumentClient, PutCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb');
 const { DynamoDBDocumentClient, PutCommand, QueryCommand, DeleteCommand, BatchWriteCommand, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
 
 // --- Configuração do DynamoDB ---
@@ -15,9 +14,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(awsServerlessExpressMiddleware.eventContext());
 
-// --- Middleware de CORS ---
-// Este bloco único deve ser a primeira coisa após a configuração inicial.
-// Ele lida com as requisições "preflight" (OPTIONS) e adiciona os cabeçalhos corretos a todas as respostas.
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*'); // Permite qualquer origem (em produção, você pode restringir a URL do seu site)
 	res.header('Access-Control-Allow-Credentials', true);
@@ -27,21 +23,17 @@ app.use((req, res, next) => {
 	// Se o método da requisição for OPTIONS, o navegador está apenas checando as permissões de CORS.
 	// Responda com 200 OK e encerre a requisição aqui.
 	if (req.method === 'OPTIONS') {
-		console.log("I run");
 		return res.sendStatus(200);
 	} else {
 		console.log(res);
 	}
 
-	// Se não for uma requisição OPTIONS, continue para as rotas da sua API.
 	next();
 });
 
 // --- Função Auxiliar para Obter o ID do Usuário ---
 const getUserId = (req) => {
 	try {
-		//return req.apiGateway.event.requestContext.authorizer.claims.sub;
-		return req.apiGateway.event.requestContext.identity.cognitoIdentityId;
 		return req.apiGateway.event.requestContext.identity.cognitoIdentityId;
 	} catch (error) {
 		console.error("Não foi possível obter o ID do usuário. O token pode estar ausente ou inválido.", error);

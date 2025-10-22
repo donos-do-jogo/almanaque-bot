@@ -25,7 +25,7 @@ exports.handler = async (event) => {
         // The base user record to be created in DynamoDB
         const userItem = {
             PK: `USER#${userId}`,
-            SK: `USER#${userId}`, // For a base user item, PK and SK are often the same
+            SK: `USER#${userId}`,
             type: 'User',
             id: userId,
             email: userEmail,
@@ -47,6 +47,5 @@ exports.handler = async (event) => {
         }
     }
 
-    // Important: Always return the event object back to Cognito
     return event;
 };
